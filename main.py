@@ -81,7 +81,12 @@ class CalculatorWindow(QMainWindow):
 
     def sigh_change(self):
         self.number = float(self.pole.text())
-        self.pole.setText(str(self.number * (-1)))
+        if self.number != 0:
+            self.pole.setText(str(self.number * (-1)))
+        if '.' in self.pole.text():
+            self.pole.setText((self.pole.text()).rstrip('0'))
+        if self.pole.text().endswith('.'):
+            self.pole.setText(self.pole.text()[:-1])
 
     def cancel(self):
         self.pole.setText('0')
@@ -91,8 +96,13 @@ class CalculatorWindow(QMainWindow):
         self.number2 = float(self.pole.text())
         persent_number = (self.number1 / 100) * self.number2
         try:
-            self.pole.setText(str(eval(f'{self.number1} {self.current_arif_operation} {persent_number}')))
-            self.need_change_number = True
+            if self.current_arif_operation == '+' or self.current_arif_operation == '-':
+                self.pole.setText(str(eval(f'{self.number1} {self.current_arif_operation} {persent_number}')))
+                self.need_change_number = True
+            elif self.current_arif_operation == '*':
+                self.pole.setText(str(persent_number))
+            elif self.current_arif_operation == '/':
+                self.pole.setText(str(self.number1 / self.number2 * 100))
             if '.' in self.pole.text():
                 self.pole.setText((self.pole.text()).rstrip('0'))
             if self.pole.text().endswith('.'):
@@ -163,6 +173,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = CalculatorWindow()
     sys.exit(app.exec_())
-
-# TODO Добавить кнопку процента
-
