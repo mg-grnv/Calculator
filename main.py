@@ -1,6 +1,8 @@
 import sys
 
-from PyQt5.QtWidgets import QWidget, QGridLayout, QMainWindow, QApplication, QLineEdit, QPushButton, QMessageBox
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QWidget, QGridLayout, QMainWindow, QApplication, QLineEdit, QPushButton, QMessageBox, \
+    QSizePolicy
 from math import sqrt
 
 class CalculatorWindow(QMainWindow):
@@ -114,11 +116,11 @@ class CalculatorWindow(QMainWindow):
             error.exec_()
 
     def initUI(self): # Пользовательский интерфейс
+        button_stylesheet = 'QPushButton {background-color: #44840f; font-size: 50px}'
         self.need_change_number = False
         self.equals_repeat = False
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
-        # QGridLayout() - сетка
         grid = QGridLayout()
         central_widget.setLayout(grid)
         self.pole = QLineEdit('0')
@@ -128,6 +130,8 @@ class CalculatorWindow(QMainWindow):
         column = 0
         for i in range(1, 10):
             button = QPushButton(f'{i}')
+            button.setStyleSheet(button_stylesheet)
+            button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
             button.clicked.connect(self.text)
             grid.addWidget(button, line, column)
             column += 1
@@ -136,6 +140,8 @@ class CalculatorWindow(QMainWindow):
                 column = 0
                 continue
         button = QPushButton('0')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.text)
         grid.addWidget(button, 4, 0)
         button = QPushButton('=')
@@ -167,9 +173,19 @@ class CalculatorWindow(QMainWindow):
         button = QPushButton('%')
         button.clicked.connect(self.persent)
         grid.addWidget(button, 1, 5)
+
+        self.setWindowTitle('Calculator')
+        self.setWindowIcon(QIcon('Calculator.svg'))
+        self.setMinimumWidth(400)
+        self.setMinimumHeight(600)
         self.show()
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setStyleSheet('CalculatorWindow {background-color: #273a19}')
     window = CalculatorWindow()
     sys.exit(app.exec_())
+
+# TODO При нажатии на равно программа должна повторить действие с предыдущего шага
+# TODO Кнопки целочисленного и вещественного делений поменять местами
+# TODO Сделать округление как в Calc
