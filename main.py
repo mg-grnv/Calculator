@@ -51,10 +51,12 @@ class CalculatorWindow(QMainWindow):
         self.need_change_number = True
         if self.equals_repeat:
             self.number1 = float(self.pole.text())
-        try:
+        else:
             self.number2 = float(self.pole.text())
-        except ValueError:
-            print('Да')
+        # try:
+        #     self.number2 = float(self.pole.text())
+        # except ValueError:
+        #     print('Да')
         try:
             self.pole.setText(str(eval(f'{self.number1} {self.current_arif_operation} {self.number2}')))
             self.equals_repeat = True
@@ -145,32 +147,48 @@ class CalculatorWindow(QMainWindow):
         button.clicked.connect(self.text)
         grid.addWidget(button, 4, 0)
         button = QPushButton('=')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.equals_button_func)
         grid.addWidget(button, 4, 2)
         line = 1
         column = 3
-        arif_operation = ('//', '*', '-', '+')
+        arif_operation = ('/', '*', '-', '+')
         for i in range(4):
             button = QPushButton(f'{arif_operation[i]}')
+            button.setStyleSheet(button_stylesheet)
+            button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
             button.clicked.connect(self.arif_button_func)
             grid.addWidget(button, line, column)
             line += 1
         button = QPushButton('sqrt')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.sqrt_button_func)
         grid.addWidget(button, 3, 4)
         button = QPushButton('±')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.sigh_change)
         grid.addWidget(button, 2, 4)
         button = QPushButton('.')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.text)
         grid.addWidget(button, 4, 1)
-        button = QPushButton('/')
+        button = QPushButton('//')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.arif_button_func)
         grid.addWidget(button, 1, 4)
         button = QPushButton('AC')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.cancel)
         grid.addWidget(button, 4, 4)
         button = QPushButton('%')
+        button.setStyleSheet(button_stylesheet)
+        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.persent)
         grid.addWidget(button, 1, 5)
 
@@ -185,7 +203,3 @@ if __name__ == '__main__':
     app.setStyleSheet('CalculatorWindow {background-color: #273a19}')
     window = CalculatorWindow()
     sys.exit(app.exec_())
-
-# TODO При нажатии на равно программа должна повторить действие с предыдущего шага
-# TODO Кнопки целочисленного и вещественного делений поменять местами
-# TODO Сделать округление как в Calc
