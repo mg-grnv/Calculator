@@ -1,29 +1,35 @@
 import sys
+import typing
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QGridLayout, QMainWindow, QApplication, QLineEdit, QPushButton, QMessageBox, \
     QSizePolicy
 from math import sqrt
 
+from PyQt5.uic.properties import QtGui
+
 
 class CalculatorWindow(QMainWindow):
-    def text(self):
+    def text(self, key=None):
         # sender() - функция, которая возвращает объект, который вызвал текущую функцию
+        if not key:
+            key = self.sender().text()
         if self.need_change_number:
-            if self.sender().text() != '.':
-                a = self.sender().text()
+            if key != '.':
+                a = key
             else:
                 a = '0.'
         else:
-            if self.sender().text() == '.':
+            if key == '.':
                 if '.' not in self.pole.text() and len(self.pole.text()) != 0:
-                    a = self.pole.text() + self.sender().text()
+                    a = self.pole.text() + key
                 elif '.' in self.pole.text():
                     a = self.pole.text()
                 else:
                     a = '0.'
             else:
-                a = self.pole.text() + self.sender().text()
+                a = self.pole.text() + key
         self.pole.setText(self.del_lead_zero(a))
         self.need_change_number = False
         self.equals_repeat = False
@@ -114,6 +120,11 @@ class CalculatorWindow(QMainWindow):
             error.setText('Предпринята попытка деления на 0')
             error.exec_()
 
+    def keyPressEvent(self, a0):
+        keys_list = (Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9)
+        if a0.key() in keys_list:
+            self.text(str(keys_list.index(a0.key())))
+
     def initUI(self):  # Пользовательский интерфейс
         self.need_change_number = False
         self.equals_repeat = False
@@ -184,3 +195,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = CalculatorWindow()
     sys.exit(app.exec_())
+
+# TODO Оформить строчку
+# TODO Уменьшение / увеличение кол-ва дробных знаков
+# TODO Кнопка BackSpace
