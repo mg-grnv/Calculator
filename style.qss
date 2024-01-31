@@ -1,0 +1,8 @@
+QPushButton {
+background-color: #44840f;
+font-size: 50px;
+}
+
+CalculatorWindow {
+background-color: #273a19;
+}

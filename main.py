@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QWidget, QGridLayout, QMainWindow, QApplication, QLi
     QSizePolicy
 from math import sqrt
 
+
 class CalculatorWindow(QMainWindow):
     def text(self):
         # sender() - функция, которая возвращает объект, который вызвал текущую функцию
@@ -53,10 +54,6 @@ class CalculatorWindow(QMainWindow):
             self.number1 = float(self.pole.text())
         else:
             self.number2 = float(self.pole.text())
-        # try:
-        #     self.number2 = float(self.pole.text())
-        # except ValueError:
-        #     print('Да')
         try:
             self.pole.setText(str(eval(f'{self.number1} {self.current_arif_operation} {self.number2}')))
             self.equals_repeat = True
@@ -117,8 +114,7 @@ class CalculatorWindow(QMainWindow):
             error.setText('Предпринята попытка деления на 0')
             error.exec_()
 
-    def initUI(self): # Пользовательский интерфейс
-        button_stylesheet = 'QPushButton {background-color: #44840f; font-size: 50px}'
+    def initUI(self):  # Пользовательский интерфейс
         self.need_change_number = False
         self.equals_repeat = False
         central_widget = QWidget()
@@ -132,8 +128,6 @@ class CalculatorWindow(QMainWindow):
         column = 0
         for i in range(1, 10):
             button = QPushButton(f'{i}')
-            button.setStyleSheet(button_stylesheet)
-            button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
             button.clicked.connect(self.text)
             grid.addWidget(button, line, column)
             column += 1
@@ -142,13 +136,9 @@ class CalculatorWindow(QMainWindow):
                 column = 0
                 continue
         button = QPushButton('0')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.text)
         grid.addWidget(button, 4, 0)
         button = QPushButton('=')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.equals_button_func)
         grid.addWidget(button, 4, 2)
         line = 1
@@ -156,50 +146,41 @@ class CalculatorWindow(QMainWindow):
         arif_operation = ('/', '*', '-', '+')
         for i in range(4):
             button = QPushButton(f'{arif_operation[i]}')
-            button.setStyleSheet(button_stylesheet)
-            button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
             button.clicked.connect(self.arif_button_func)
             grid.addWidget(button, line, column)
             line += 1
-        button = QPushButton('sqrt')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
+        button = QPushButton('√')
         button.clicked.connect(self.sqrt_button_func)
         grid.addWidget(button, 3, 4)
         button = QPushButton('±')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.sigh_change)
         grid.addWidget(button, 2, 4)
         button = QPushButton('.')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.text)
         grid.addWidget(button, 4, 1)
         button = QPushButton('//')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.arif_button_func)
         grid.addWidget(button, 1, 4)
         button = QPushButton('AC')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.cancel)
         grid.addWidget(button, 4, 4)
         button = QPushButton('%')
-        button.setStyleSheet(button_stylesheet)
-        button.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Expanding)
         button.clicked.connect(self.persent)
         grid.addWidget(button, 1, 5)
 
+        for item in central_widget.findChildren(QPushButton):
+            item.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+
+        grid.setSpacing(10)
+        self.setStyleSheet(open("style.qss", "r").read())
         self.setWindowTitle('Calculator')
         self.setWindowIcon(QIcon('Calculator.svg'))
         self.setMinimumWidth(400)
         self.setMinimumHeight(600)
         self.show()
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    app.setStyleSheet('CalculatorWindow {background-color: #273a19}')
     window = CalculatorWindow()
     sys.exit(app.exec_())
