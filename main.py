@@ -125,12 +125,18 @@ class CalculatorWindow(QMainWindow):
             self.pole.setText(str(self.pole.text()[:-1]))
 
     def fractional_characters(self):
-        cnt = len()
-        if self.sender().text() == '+0':
-            cnt += 1
-            self.pole.setText()
-        elif self.sender().text() == '-0':
-            cnt -= 1
+        number_pole = self.pole.text()
+        if '.' in number_pole:
+            cnt = len(number_pole.split('.')[1])
+            if self.sender().text() == '+0':
+                cnt += 1
+                self.pole.setText(f'{float(number_pole): .{cnt}f}')
+            elif self.sender().text() == '-0':
+                cnt -= 1
+                self.pole.setText(f'{float(number_pole): .{cnt}f}')
+        else:
+            if self.sender().text() == '+0':
+                self.pole.setText(f'{float(number_pole)}')
 
     def keyPressEvent(self, a0):
         keys_list = (Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9)
@@ -216,7 +222,3 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = CalculatorWindow()
     sys.exit(app.exec_())
-
-# TODO Оформить строчку
-# TODO Уменьшение / увеличение кол-ва дробных знаков
-# TODO Кнопка BackSpace
