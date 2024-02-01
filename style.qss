@@ -4,5 +4,9 @@ font-size: 50px;
 }
 
 CalculatorWindow {
-background-color: #273a19;
+background-color: #273a19;;
+}
+
+QLineEdit {
+font-size: 50px;
 }
