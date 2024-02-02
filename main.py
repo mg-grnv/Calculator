@@ -4,10 +4,12 @@ import typing
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QGridLayout, QMainWindow, QApplication, QLineEdit, QPushButton, QMessageBox, \
-    QSizePolicy
+    QSizePolicy, QMenuBar
 from math import sqrt
 
 from PyQt5.uic.properties import QtGui
+
+from color_selection import ColorSelection
 
 
 class CalculatorWindow(QMainWindow):
@@ -121,7 +123,7 @@ class CalculatorWindow(QMainWindow):
             error.exec_()
 
     def backspace(self):
-        if self.equals_repeat == False:
+        if not self.equals_repeat and not self.need_change_number:
             self.pole.setText(str(self.pole.text()[:-1]))
 
     def fractional_characters(self):
@@ -130,10 +132,10 @@ class CalculatorWindow(QMainWindow):
             cnt = len(number_pole.split('.')[1])
             if self.sender().text() == '+0':
                 cnt += 1
-                self.pole.setText(f'{float(number_pole): .{cnt}f}')
+                self.pole.setText(f'{float(number_pole):.{cnt}f}')
             elif self.sender().text() == '-0':
                 cnt -= 1
-                self.pole.setText(f'{float(number_pole): .{cnt}f}')
+                self.pole.setText(f'{float(number_pole):.{cnt}f}')
         else:
             if self.sender().text() == '+0':
                 self.pole.setText(f'{float(number_pole)}')
@@ -143,13 +145,25 @@ class CalculatorWindow(QMainWindow):
         if a0.key() in keys_list:
             self.text(str(keys_list.index(a0.key())))
 
-    def initUI(self):  # Пользовательский интерфейс
+    def open_color_selection_window(self):
+        color_selection_window = ColorSelection()
+        color_selection_window.exec_()
+
+    def initUI(self):
         self.need_change_number = False
         self.equals_repeat = False
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
         grid = QGridLayout()
         central_widget.setLayout(grid)
+        menu = QMenuBar()
+        menu_file = menu.addMenu('Файл')
+        menu_settings = menu.addMenu('Настройки')
+        exit_action = menu_file.addAction('Выход')
+        exit_action.triggered.connect(self.close)
+        color_selection = menu_settings.addAction('Выбор цвета')
+        color_selection.triggered.connect(self.open_color_selection_window)
+        grid.setMenuBar(menu)
         self.pole = QLineEdit('0')
         self.pole.setEnabled(False)
         grid.addWidget(self.pole, 0, 0, 1, 6)
@@ -173,8 +187,10 @@ class CalculatorWindow(QMainWindow):
         line = 1
         column = 3
         arif_operation = ('/', '*', '-', '+')
+        arif_names = ('Division', 'Multiplication', 'Difference', 'Sum')
         for i in range(4):
             button = QPushButton(f'{arif_operation[i]}')
+            button.setObjectName(arif_names[i])
             button.clicked.connect(self.arif_button_func)
             grid.addWidget(button, line, column)
             line += 1
