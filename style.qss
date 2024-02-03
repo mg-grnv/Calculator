@@ -1,5 +1,5 @@
 QPushButton {
-background-color: #44840f;
+background-color: grey;
 font-size: 50px;
 }
 
@@ -7,15 +7,15 @@ QPushButton#Division,
 QPushButton#Multiplication,
 QPushButton#Difference,
 QPushButton#Sum {
-background-color: red;
+background-color: orange;
 }
 
 QPushButton:hover {
-background-color: yellow
+background-color: green
 }
 
 CalculatorWindow {
-background-color: #273a19;;
+background-color: white;
 }
 
 QLineEdit {
@@ -23,5 +23,5 @@ font-size: 50px;
 }
 
 QMenuBar {
-background-color: #44840f;
+background-color: white;
 }

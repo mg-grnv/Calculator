@@ -53,7 +53,9 @@ class CalculatorWindow(QMainWindow):
         if self.pole.text().endswith('.'):
             self.pole.setText(self.pole.text()[:-1])
         self.number1 = float(self.pole.text())
-        self.current_arif_operation = self.sender().text()
+        self.current_arif_operation = self.sender()
+        if type(self.current_arif_operation) == QPushButton:
+            self.current_arif_operation = self.sender().text()
         self.need_change_number = True
 
     def equals_button_func(self):
@@ -142,8 +144,25 @@ class CalculatorWindow(QMainWindow):
 
     def keyPressEvent(self, a0):
         keys_list = (Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9)
+        # arif_operations_list = (Qt.Key_division, Qt.Key_multiply, Qt.Key_Minus, Qt.Key_Plus)
         if a0.key() in keys_list:
             self.text(str(keys_list.index(a0.key())))
+        if a0.key() == Qt.Key_Backspace:
+            self.backspace()
+        if a0.key() == Qt.Key_Escape:
+            self.close()
+        if a0.key() == Qt.Key_Equal:
+            self.equals_button_func()
+        if a0.key() == Qt.Key_Period:
+            self.text('.')
+        if a0.key() == 43: # "+"
+            self.arif_button_func()
+        if a0.key() == 45: # "-"
+            self.arif_button_func()
+        if a0.key() == 47: # "/"
+            self.arif_button_func()
+        if a0.key() == 42: # "*"
+            self.arif_button_func()
 
     def open_color_selection_window(self):
         color_selection_window = ColorSelection()
