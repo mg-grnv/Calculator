@@ -13,7 +13,6 @@ from color_selection import ColorSelection
 
 class CalculatorWindow(QMainWindow):
     def text(self, key=None):
-        # sender() - функция, которая возвращает объект, который вызвал текущую функцию
         if not key:
             key = self.sender().text()
         if self.need_change_number:
@@ -46,15 +45,13 @@ class CalculatorWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.initUI()
 
-    def arif_button_func(self):
+    def arif_button_func(self, operation):
         if '.' in self.pole.text():
             self.pole.setText((self.pole.text()).rstrip('0'))
         if self.pole.text().endswith('.'):
             self.pole.setText(self.pole.text()[:-1])
         self.number1 = float(self.pole.text())
-        self.current_arif_operation = self.sender()
-        if type(self.current_arif_operation) == QPushButton:
-            self.current_arif_operation = self.sender().text()
+        self.current_arif_operation = operation
         self.need_change_number = True
 
     def equals_button_func(self):
@@ -155,13 +152,13 @@ class CalculatorWindow(QMainWindow):
         if a0.key() == Qt.Key_Period:
             self.text('.')
         if a0.key() == 43: # "+"
-            self.arif_button_func()
+            self.arif_button_func('+')
         if a0.key() == 45: # "-"
-            self.arif_button_func()
+            self.arif_button_func('-')
         if a0.key() == 47: # "/"
-            self.arif_button_func()
+            self.arif_button_func('/')
         if a0.key() == 42: # "*"
-            self.arif_button_func()
+            self.arif_button_func('*')
 
     def open_color_selection_window(self):
         color_selection_window = ColorSelection()
@@ -207,9 +204,9 @@ class CalculatorWindow(QMainWindow):
         arif_operation = ('/', '*', '-', '+')
         arif_names = ('Division', 'Multiplication', 'Difference', 'Sum')
         for i in range(4):
-            button = QPushButton(f'{arif_operation[i]}')
+            button = QPushButton(arif_operation[i])
             button.setObjectName(arif_names[i])
-            button.clicked.connect(self.arif_button_func)
+            button.clicked.connect(lambda: self.arif_button_func(arif_operation[i]))
             grid.addWidget(button, line, column)
             line += 1
         button = QPushButton('√')
@@ -222,7 +219,7 @@ class CalculatorWindow(QMainWindow):
         button.clicked.connect(self.text)
         grid.addWidget(button, 4, 1)
         button = QPushButton('//')
-        button.clicked.connect(self.arif_button_func)
+        button.clicked.connect(lambda: self.arif_button_func('//'))
         grid.addWidget(button, 1, 4)
         button = QPushButton('AC')
         button.clicked.connect(self.cancel)
