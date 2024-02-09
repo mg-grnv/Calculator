@@ -138,9 +138,15 @@ class CalculatorWindow(QMainWindow):
             if self.sender().text() == '+0':
                 self.pole.setText(f'{float(number_pole)}')
 
+    def exponentiation(self, x):
+        self.pole.setText(str(eval(f'{float(self.pole.text())} ** {x}')))
+        if '.' in self.pole.text():
+            self.pole.setText((self.pole.text()).rstrip('0'))
+        if self.pole.text().endswith('.'):
+            self.pole.setText(self.pole.text()[:-1])
+
     def keyPressEvent(self, a0):
         keys_list = (Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9)
-        # arif_operations_list = (Qt.Key_division, Qt.Key_multiply, Qt.Key_Minus, Qt.Key_Plus)
         if a0.key() in keys_list:
             self.text(str(keys_list.index(a0.key())))
         if a0.key() == Qt.Key_Backspace:
@@ -181,7 +187,7 @@ class CalculatorWindow(QMainWindow):
         grid.setMenuBar(menu)
         self.pole = QLineEdit('0')
         self.pole.setEnabled(False)
-        grid.addWidget(self.pole, 0, 0, 1, 6)
+        grid.addWidget(self.pole, 0, 0, 1, 7)
         line = 1
         column = 0
         for i in range(1, 10):
@@ -211,7 +217,7 @@ class CalculatorWindow(QMainWindow):
             line += 1
         button = QPushButton('√')
         button.clicked.connect(self.sqrt_button_func)
-        grid.addWidget(button, 3, 4)
+        grid.addWidget(button, 4, 6)
         button = QPushButton('±')
         button.clicked.connect(self.sigh_change)
         grid.addWidget(button, 2, 4)
@@ -223,19 +229,25 @@ class CalculatorWindow(QMainWindow):
         grid.addWidget(button, 1, 4)
         button = QPushButton('AC')
         button.clicked.connect(self.cancel)
-        grid.addWidget(button, 4, 4)
+        grid.addWidget(button, 3, 4, 2, 1)
         button = QPushButton('%')
         button.clicked.connect(self.persent)
-        grid.addWidget(button, 1, 5)
+        grid.addWidget(button, 2, 5)
         button = QPushButton('←BS')
         button.clicked.connect(self.backspace)
-        grid.addWidget(button, 2, 5)
+        grid.addWidget(button, 1, 5, 1, 2)
         button = QPushButton('+0')
         button.clicked.connect(self.fractional_characters)
         grid.addWidget(button, 3, 5)
         button = QPushButton('-0')
         button.clicked.connect(self.fractional_characters)
         grid.addWidget(button, 4, 5)
+        button = QPushButton('x²')
+        button.clicked.connect(lambda: self.exponentiation('2'))
+        grid.addWidget(button, 2, 6)
+        button = QPushButton('x³')
+        button.clicked.connect(lambda: self.exponentiation('3'))
+        grid.addWidget(button, 3, 6)
 
         for item in central_widget.findChildren(QPushButton):
             item.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
