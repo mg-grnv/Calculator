@@ -138,12 +138,12 @@ class CalculatorWindow(QMainWindow):
             if self.sender().text() == '+0':
                 self.pole.setText(f'{float(number_pole)}')
 
-    def exponentiation(self, x):
-        self.pole.setText(str(eval(f'{float(self.pole.text())} ** {x}')))
-        if '.' in self.pole.text():
-            self.pole.setText((self.pole.text()).rstrip('0'))
-        if self.pole.text().endswith('.'):
-            self.pole.setText(self.pole.text()[:-1])
+    # def exponentiation(self, x):
+    #     self.pole.setText(str(eval(f'{float(self.pole.text())} ** {x}')))
+    #     if '.' in self.pole.text():
+    #         self.pole.setText((self.pole.text()).rstrip('0'))
+    #     if self.pole.text().endswith('.'):
+    #         self.pole.setText(self.pole.text()[:-1])
 
     def keyPressEvent(self, a0):
         keys_list = (Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9)
@@ -212,7 +212,7 @@ class CalculatorWindow(QMainWindow):
         for i in range(4):
             button = QPushButton(arif_operation[i])
             button.setObjectName(arif_names[i])
-            button.clicked.connect(lambda: self.arif_button_func(arif_operation[i]))
+            button.released.connect(lambda x=i: self.arif_button_func(arif_operation[x]))
             grid.addWidget(button, line, column)
             line += 1
         button = QPushButton('√')
@@ -245,8 +245,8 @@ class CalculatorWindow(QMainWindow):
         button = QPushButton('x²')
         button.clicked.connect(lambda: self.exponentiation('2'))
         grid.addWidget(button, 2, 6)
-        button = QPushButton('x³')
-        button.clicked.connect(lambda: self.exponentiation('3'))
+        button = QPushButton('x^y')
+        button.clicked.connect(lambda: self.arif_button_func('**'))
         grid.addWidget(button, 3, 6)
 
         for item in central_widget.findChildren(QPushButton):

@@ -10,7 +10,7 @@ QPushButton#Sum {
 background-color: orange;
 }
 
-QPushButton:hover {
+QPushButton:pressed {
 background-color: green
 }
 
