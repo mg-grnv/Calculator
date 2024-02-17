@@ -122,7 +122,10 @@ class CalculatorWindow(QMainWindow):
 
     def backspace(self):
         if not self.equals_repeat and not self.need_change_number:
-            self.pole.setText(str(self.pole.text()[:-1]))
+            if len(self.pole.text()) > 1:
+                self.pole.setText(str(self.pole.text()[:-1]))
+            elif len(self.pole.text()) == 1:
+                self.pole.setText('0')
 
     def fractional_characters(self):
         number_pole = self.pole.text()
