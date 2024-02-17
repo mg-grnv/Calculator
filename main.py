@@ -157,14 +157,16 @@ class CalculatorWindow(QMainWindow):
             self.equals_button_func()
         if a0.key() == Qt.Key_Period:
             self.text('.')
-        if a0.key() == 43: # "+"
+        if a0.key() == 43:  # "+"
             self.arif_button_func('+')
-        if a0.key() == 45: # "-"
+        if a0.key() == 45:  # "-"
             self.arif_button_func('-')
-        if a0.key() == 47: # "/"
+        if a0.key() == 47:  # "/"
             self.arif_button_func('/')
-        if a0.key() == 42: # "*"
+        if a0.key() == 42:  # "*"
             self.arif_button_func('*')
+        if a0.key() == 67:  # "AC"
+            self.cancel()
 
     def open_color_selection_window(self):
         color_selection_window = ColorSelection()
