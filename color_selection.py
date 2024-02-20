@@ -8,6 +8,10 @@ class ColorSelection(QDialog):
         super().__init__(*args, **kwargs)
         self.initUI()
 
+    def accept_func(self):
+        self.key_background_image = self.dict_towns.get(self.color_selection_combo_box.currentText()) + '.jpg'
+        self.accept()
+
     def change_image(self):
         current_theme = self.color_selection_combo_box.currentText()
         current_image = self.dict_towns[current_theme] + '.jpg'
@@ -41,7 +45,7 @@ class ColorSelection(QDialog):
         self.change_image()
         grid.addWidget(self.picture, 1, 0, 1, 2)
         accept_button = QPushButton('Ок')
-        accept_button.clicked.connect(self.accept)
+        accept_button.clicked.connect(self.accept_func)
         grid.addWidget(accept_button, 2, 0)
         reject_button = QPushButton('Отмена')
         reject_button.clicked.connect(self.reject)

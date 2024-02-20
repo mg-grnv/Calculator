@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QPixmap, QPalette, QBrush
 from PyQt5.QtWidgets import QWidget, QGridLayout, QMainWindow, QApplication, QLineEdit, QPushButton, QMessageBox, \
     QSizePolicy, QMenuBar
 from math import sqrt
@@ -173,7 +173,19 @@ class CalculatorWindow(QMainWindow):
 
     def open_color_selection_window(self):
         color_selection_window = ColorSelection()
-        color_selection_window.exec_()
+        if color_selection_window.exec():
+            self.background_setting(color_selection_window.key_background_image)
+
+    def background_setting(self, image):
+        new_style = self.start_settings + """
+                CalculatorWindow {
+                    background-image: url(Themes/""" + image + """);
+                }"""
+        self.setStyleSheet(new_style)
+        # background = QPixmap(f'url(Themes/{image})').scaled(self.width(), self.height())
+        # pal = self.palette()
+        # pal.setBrush(QPalette.Background, QBrush(background))
+        # self.setPalette(pal)
 
     def initUI(self):
         self.need_change_number = False
@@ -259,6 +271,7 @@ class CalculatorWindow(QMainWindow):
 
         grid.setSpacing(10)
         self.setStyleSheet(open("style.qss", "r").read())
+        self.start_settings = self.styleSheet()
         self.setWindowTitle('Calculator')
         self.setWindowIcon(QIcon('Calculator.svg'))
         self.setMinimumWidth(400)
