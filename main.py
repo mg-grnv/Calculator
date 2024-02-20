@@ -175,17 +175,26 @@ class CalculatorWindow(QMainWindow):
         color_selection_window = ColorSelection()
         if color_selection_window.exec():
             self.background_setting(color_selection_window.key_background_image)
+            self.change_color_pole(color_selection_window.colorof_town)
 
     def background_setting(self, image):
         new_style = self.start_settings + """
                 CalculatorWindow {
                     background-image: url(Themes/""" + image + """);
+                    background-position: center center;
+                    background-attachment: fixed;
+                    background-repeat: no-repeat;
+                    min-height: 100%;
+                    background-size: cover;
                 }"""
         self.setStyleSheet(new_style)
         # background = QPixmap(f'url(Themes/{image})').scaled(self.width(), self.height())
         # pal = self.palette()
         # pal.setBrush(QPalette.Background, QBrush(background))
         # self.setPalette(pal)
+
+    def change_color_pole(self, color):
+        self.pole.setStyleSheet(f'background-color: {color};')
 
     def initUI(self):
         self.need_change_number = False

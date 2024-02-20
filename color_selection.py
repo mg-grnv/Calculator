@@ -11,6 +11,7 @@ class ColorSelection(QDialog):
     def accept_func(self):
         self.key_background_image = self.dict_towns.get(self.color_selection_combo_box.currentText()) + '.jpg'
         self.accept()
+        self.change_color(self.key_background_image)
 
     def change_image(self):
         current_theme = self.color_selection_combo_box.currentText()
@@ -18,6 +19,9 @@ class ColorSelection(QDialog):
         pixmap = QPixmap(f'Themes/{current_image}')
         pixmap = pixmap.scaled(self.color_selection_combo_box.width(), self.color_selection_combo_box.width(), Qt.KeepAspectRatio)
         self.picture.setPixmap(pixmap)
+
+    def change_color(self, keys_town):
+        self.colorof_town = self.colors_towns.get(keys_town)
 
     def initUI(self):
         self.setWindowTitle('Выбор цвета')
@@ -36,6 +40,19 @@ class ColorSelection(QDialog):
             'Причал': 'Heroes_3_Cove',
             'Сопряжение': 'Heroes_3_Conflux',
             'Фабрика': 'Heroes_3_Factory'
+        }
+        self.colors_towns = {
+            'Heroes_3_Castle.jpg': 'Gold',
+            'Heroes_3_Rampart.jpg': 'ForestGreen',
+            'Heroes_3_Tower.jpg': 'DeepSkyBlue',
+            'Heroes_3_Inferno.jpg': 'FireBrick',
+            'Heroes_3_Necropolis.jpg': 'Black',
+            'Heroes_3_Dungeon.jpg': 'SaddleBrown',
+            'Heroes_3_Fortress.jpg': 'DarkGreen',
+            'Heroes_3_Stronghold.jpg': 'SandyBrown',
+            'Heroes_3_Cove.jpg': 'MidnightBlue',
+            'Heroes_3_Conflux.jpg': 'Goldenrod',
+            'Heroes_3_Factory.jpg': 'Sienna'
         }
         self.color_selection_combo_box = QComboBox()
         self.color_selection_combo_box.addItems(list(self.dict_towns.keys()))
