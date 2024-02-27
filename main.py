@@ -141,12 +141,12 @@ class CalculatorWindow(QMainWindow):
             if self.sender().text() == '+0':
                 self.pole.setText(f'{float(number_pole)}')
 
-    # def exponentiation(self, x):
-    #     self.pole.setText(str(eval(f'{float(self.pole.text())} ** {x}')))
-    #     if '.' in self.pole.text():
-    #         self.pole.setText((self.pole.text()).rstrip('0'))
-    #     if self.pole.text().endswith('.'):
-    #         self.pole.setText(self.pole.text()[:-1])
+    def exponentiation(self, x):
+        self.pole.setText(str(eval(f'{float(self.pole.text())} ** {x}')))
+        if '.' in self.pole.text():
+            self.pole.setText((self.pole.text()).rstrip('0'))
+        if self.pole.text().endswith('.'):
+            self.pole.setText(self.pole.text()[:-1])
 
     def keyPressEvent(self, a0):
         keys_list = (Qt.Key_0, Qt.Key_1, Qt.Key_2, Qt.Key_3, Qt.Key_4, Qt.Key_5, Qt.Key_6, Qt.Key_7, Qt.Key_8, Qt.Key_9)
@@ -208,7 +208,7 @@ class CalculatorWindow(QMainWindow):
         menu_settings = menu.addMenu('Настройки')
         exit_action = menu_file.addAction('Выход')
         exit_action.triggered.connect(self.close)
-        color_selection = menu_settings.addAction('Выбор цвета')
+        color_selection = menu_settings.addAction('Выбор темы')
         color_selection.triggered.connect(self.open_color_selection_window)
         grid.setMenuBar(menu)
         self.pole = QLineEdit('0')

@@ -24,7 +24,7 @@ class ColorSelection(QDialog):
         self.colorof_town = self.colors_towns.get(keys_town)
 
     def initUI(self):
-        self.setWindowTitle('Выбор цвета')
+        self.setWindowTitle('Выбор темы')
         self.setMinimumWidth(300)
         grid = QGridLayout()
         self.setLayout(grid)
