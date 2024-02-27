@@ -9,6 +9,7 @@ from math import sqrt
 from PyQt5.uic.properties import QtGui
 
 from color_selection import ColorSelection
+from charting_window import Charting
 
 
 class CalculatorWindow(QMainWindow):
@@ -177,6 +178,10 @@ class CalculatorWindow(QMainWindow):
             self.background_setting(color_selection_window.key_background_image)
             self.change_color_pole(color_selection_window.colorof_town)
 
+    def open_charting_window(self):
+        charting_window = Charting()
+        charting_window.exec()
+
     def background_setting(self, image):
         new_style = self.start_settings + """
                 CalculatorWindow {
@@ -206,6 +211,9 @@ class CalculatorWindow(QMainWindow):
         menu = QMenuBar()
         menu_file = menu.addMenu('Файл')
         menu_settings = menu.addMenu('Настройки')
+        menu_graphs = menu.addMenu('Графики')
+        charting = menu_graphs.addAction('Построение графиков функций')
+        charting.triggered.connect(self.open_charting_window)
         exit_action = menu_file.addAction('Выход')
         exit_action.triggered.connect(self.close)
         color_selection = menu_settings.addAction('Выбор темы')
