@@ -193,10 +193,6 @@ class CalculatorWindow(QMainWindow):
                     background-size: cover;
                 }"""
         self.setStyleSheet(new_style)
-        # background = QPixmap(f'url(Themes/{image})').scaled(self.width(), self.height())
-        # pal = self.palette()
-        # pal.setBrush(QPalette.Background, QBrush(background))
-        # self.setPalette(pal)
 
     def change_color_pole(self, color):
         self.pole.setStyleSheet(f'background-color: {color};')

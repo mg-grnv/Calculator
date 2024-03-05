@@ -35,6 +35,11 @@ class Charting(QDialog):
     def change_borders(self):
         self.axis_information.setText(f'Границы оси абсцисс: [{self.left_border.value()}; {self.right_border.value()}]')
 
+    def formatting_function(self):
+        self.entering_function.setText(self.entering_function.text().replace('^', '**'))
+        for i in '0123456789':
+            self.entering_function.setText(self.entering_function.text().replace(i + 'x', i + ' * x'))
+
     def initUI(self):
         self.setWindowTitle('Построение графиков функций')
         self.setMinimumWidth(300)
@@ -65,11 +70,13 @@ class Charting(QDialog):
         self.right_border.valueChanged.connect(self.change_borders)
         self.right_border.setSingleStep(1)
         self.change_borders()
-        self.hint.setText('Подсказка: Ввод осуществляется через клавиатуру. Возведение в степень пишется как "**", '
-                          'запись "#x", ''где # - число, пишется как "# * x"')
+        self.hint.setText('Подсказка: Ввод осуществляется через клавиатуру')
         accept_button = QPushButton('Ок')
         accept_button.clicked.connect(self.accept_button)
         grid.addWidget(accept_button, 4, 0)
         reject_button = QPushButton('Отмена')
         reject_button.clicked.connect(self.reject)
         grid.addWidget(reject_button, 4, 1)
+        formatting_button = QPushButton('Отформатировать')
+        formatting_button.clicked.connect(self.formatting_function)
+        grid.addWidget(formatting_button, 5, 0, 1, 2)
