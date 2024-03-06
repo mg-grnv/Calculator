@@ -1,5 +1,5 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QDialog, QGridLayout, QPushButton, QLineEdit, QLabel, QSlider, QMessageBox
+from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtWidgets import QDialog, QGridLayout, QPushButton, QLineEdit, QLabel, QSlider, QMessageBox, QColorDialog
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -10,6 +10,7 @@ class Charting(QDialog):
         self.initUI()
 
     def accept_button(self):
+        self.formatting_function()
         self.polynomial = self.entering_function.text()
         ax = plt.gca()
         ax.axhline(y=0, color='k')
@@ -23,22 +24,30 @@ class Charting(QDialog):
             error.exec_()
         x1 = np.arange(self.left_border.value(), self.right_border.value(), 0.01)
         x2 = []
-        for i in range(len(x1)):
-            x2.append(eval(self.polynomial, {'x':x1[i]}))
-        if self.left_border.value() != 0 and self.right_border.value() != 0:
-            plt.xlim(self.left_border.value(), self.right_border.value())
-        plt.plot(x1, x2)
-        plt.ylabel(f'{self.polynomial}')
-        plt.show()
-        self.accept()
+        try:
+            for i in range(len(x1)):
+                x2.append(eval(self.polynomial, {'x':x1[i]}))
+        except Exception:
+            error = QMessageBox()
+            error.setWindowTitle('Внимание!')
+            error.setText('Введены некорректные значения')
+            error.setMinimumSize(QSize(150, 100))
+            error.exec_()
+        else:
+            if self.left_border.value() != 0 and self.right_border.value() != 0:
+                plt.xlim(self.left_border.value(), self.right_border.value())
+            plt.plot(x1, x2)
+            plt.ylabel(f'{self.polynomial}')
+            plt.show()
+            self.accept()
 
     def change_borders(self):
         self.axis_information.setText(f'Границы оси абсцисс: [{self.left_border.value()}; {self.right_border.value()}]')
 
     def formatting_function(self):
         self.entering_function.setText(self.entering_function.text().replace('^', '**'))
-        for i in '0123456789':
-            self.entering_function.setText(self.entering_function.text().replace(i + 'x', i + ' * x'))
+        for i in range(10):
+            self.entering_function.setText(self.entering_function.text().replace(f'{i}x', f'{i} * x'))
 
     def initUI(self):
         self.setWindowTitle('Построение графиков функций')
@@ -77,6 +86,3 @@ class Charting(QDialog):
         reject_button = QPushButton('Отмена')
         reject_button.clicked.connect(self.reject)
         grid.addWidget(reject_button, 4, 1)
-        formatting_button = QPushButton('Отформатировать')
-        formatting_button.clicked.connect(self.formatting_function)
-        grid.addWidget(formatting_button, 5, 0, 1, 2)
