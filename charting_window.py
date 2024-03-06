@@ -36,7 +36,10 @@ class Charting(QDialog):
         else:
             if self.left_border.value() != 0 and self.right_border.value() != 0:
                 plt.xlim(self.left_border.value(), self.right_border.value())
-            plt.plot(x1, x2)
+            if self.color_selection_call:
+                plt.plot(x1, x2, color=self.selected_color)
+            else:
+                plt.plot(x1, x2)
             plt.ylabel(f'{self.polynomial}')
             plt.show()
             self.accept()
@@ -49,7 +52,15 @@ class Charting(QDialog):
         for i in range(10):
             self.entering_function.setText(self.entering_function.text().replace(f'{i}x', f'{i} * x'))
 
+    def color_selection(self):
+        # self.color = QColorDialog.getColor().textvalue()
+        color_dialog = QColorDialog()
+        self.color = color_dialog.getColor()
+        self.selected_color = self.color.name()
+        self.color_selection_call = True
+
     def initUI(self):
+        self.color_selection_call = False
         self.setWindowTitle('Построение графиков функций')
         self.setMinimumWidth(300)
         grid = QGridLayout()
@@ -86,3 +97,6 @@ class Charting(QDialog):
         reject_button = QPushButton('Отмена')
         reject_button.clicked.connect(self.reject)
         grid.addWidget(reject_button, 4, 1)
+        choice_color = QPushButton('Выбор цвета графика')
+        choice_color.clicked.connect(self.color_selection)
+        grid.addWidget(choice_color, 5, 0, 1, 2)
