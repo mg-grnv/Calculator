@@ -1,4 +1,5 @@
 from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtGui import QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QDialog, QGridLayout, QPushButton, QLineEdit, QLabel, QSlider, QMessageBox, QColorDialog
 import matplotlib.pyplot as plt
 import numpy as np
@@ -36,10 +37,7 @@ class Charting(QDialog):
         else:
             if self.left_border.value() != 0 and self.right_border.value() != 0:
                 plt.xlim(self.left_border.value(), self.right_border.value())
-            if self.color_selection_call:
-                plt.plot(x1, x2, color=self.selected_color)
-            else:
-                plt.plot(x1, x2)
+            plt.plot(x1, x2, color=self.selected_color)
             plt.ylabel(f'{self.polynomial}')
             plt.show()
             self.accept()
@@ -53,14 +51,16 @@ class Charting(QDialog):
             self.entering_function.setText(self.entering_function.text().replace(f'{i}x', f'{i} * x'))
 
     def color_selection(self):
-        # self.color = QColorDialog.getColor().textvalue()
         color_dialog = QColorDialog()
         self.color = color_dialog.getColor()
         self.selected_color = self.color.name()
-        self.color_selection_call = True
+        self.graph_color_pixmap.fill(QColor(self.selected_color))
+        self.choice_color_button.setIcon(QIcon(self.graph_color_pixmap))
 
     def initUI(self):
-        self.color_selection_call = False
+        self.selected_color = '#0055ff'
+        self.graph_color_pixmap = QPixmap(20, 20)
+        self.graph_color_pixmap.fill(QColor(self.selected_color))
         self.setWindowTitle('Построение графиков функций')
         self.setMinimumWidth(300)
         grid = QGridLayout()
@@ -97,6 +97,8 @@ class Charting(QDialog):
         reject_button = QPushButton('Отмена')
         reject_button.clicked.connect(self.reject)
         grid.addWidget(reject_button, 4, 1)
-        choice_color = QPushButton('Выбор цвета графика')
-        choice_color.clicked.connect(self.color_selection)
-        grid.addWidget(choice_color, 5, 0, 1, 2)
+        self.choice_color_button = QPushButton('Выбор цвета графика')
+        self.choice_color_button.setIcon(QIcon(self.graph_color_pixmap))
+        self.choice_color_button.clicked.connect(self.color_selection)
+        self.choice_color_button.setLayoutDirection(Qt.RightToLeft)
+        grid.addWidget(self.choice_color_button, 5, 0, 1, 2)
