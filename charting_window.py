@@ -14,8 +14,8 @@ class Charting(QDialog):
         self.formatting_function()
         self.polynomial = self.entering_function.text()
         ax = plt.gca()
-        ax.axhline(y=0, color='k')
-        ax.axvline(x=0, color='k')
+        ax.axhline(y=0, color=f'{self.selected_color_axis}')
+        ax.axvline(x=0, color=f'{self.selected_color_axis}')
         if self.left_border.value() > self.right_border.value():
             error = QMessageBox()
             error.setWindowTitle('Внимание!')
@@ -50,17 +50,27 @@ class Charting(QDialog):
         for i in range(10):
             self.entering_function.setText(self.entering_function.text().replace(f'{i}x', f'{i} * x'))
 
-    def color_selection(self):
+    def color_selection_graph(self):
         color_dialog = QColorDialog()
         self.color = color_dialog.getColor()
         self.selected_color = self.color.name()
         self.graph_color_pixmap.fill(QColor(self.selected_color))
-        self.choice_color_button.setIcon(QIcon(self.graph_color_pixmap))
+        self.choice_color_graph.setIcon(QIcon(self.graph_color_pixmap))
+
+    def color_selection_axes(self):
+        color_dialog_axis = QColorDialog()
+        self.color_axis = color_dialog_axis.getColor()
+        self.selected_color_axis = self.color_axis.name()
+        self.axis_color_pixmap.fill(QColor(self.selected_color_axis))
+        self.choice_color_axis.setIcon(QIcon(self.axis_color_pixmap))
 
     def initUI(self):
+        self.selected_color_axis = '#000000'
         self.selected_color = '#0055ff'
         self.graph_color_pixmap = QPixmap(20, 20)
         self.graph_color_pixmap.fill(QColor(self.selected_color))
+        self.axis_color_pixmap = QPixmap(20, 20)
+        self.axis_color_pixmap.fill(QColor(self.selected_color_axis))
         self.setWindowTitle('Построение графиков функций')
         self.setMinimumWidth(300)
         grid = QGridLayout()
@@ -97,8 +107,13 @@ class Charting(QDialog):
         reject_button = QPushButton('Отмена')
         reject_button.clicked.connect(self.reject)
         grid.addWidget(reject_button, 4, 1)
-        self.choice_color_button = QPushButton('Выбор цвета графика')
-        self.choice_color_button.setIcon(QIcon(self.graph_color_pixmap))
-        self.choice_color_button.clicked.connect(self.color_selection)
-        self.choice_color_button.setLayoutDirection(Qt.RightToLeft)
-        grid.addWidget(self.choice_color_button, 5, 0, 1, 2)
+        self.choice_color_graph = QPushButton('Выбор цвета графика')
+        self.choice_color_graph.setIcon(QIcon(self.graph_color_pixmap))
+        self.choice_color_graph.clicked.connect(self.color_selection_graph)
+        self.choice_color_graph.setLayoutDirection(Qt.RightToLeft)
+        grid.addWidget(self.choice_color_graph, 5, 0, 1, 2)
+        self.choice_color_axis = QPushButton('Выбор цвета осей')
+        self.choice_color_axis.setIcon(QIcon(self.axis_color_pixmap))
+        self.choice_color_axis.clicked.connect(self.color_selection_axes)
+        self.choice_color_axis.setLayoutDirection(Qt.RightToLeft)
+        grid.addWidget(self.choice_color_axis, 6, 0, 1, 2)
