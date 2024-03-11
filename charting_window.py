@@ -3,6 +3,7 @@ from PyQt5.QtGui import QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QDialog, QGridLayout, QPushButton, QLineEdit, QLabel, QSlider, QMessageBox, QColorDialog
 import matplotlib.pyplot as plt
 import numpy as np
+from sympy import symbols, collect
 
 
 class Charting(QDialog):
@@ -39,7 +40,9 @@ class Charting(QDialog):
                 plt.xlim(self.left_border.value(), self.right_border.value())
             ax.set_facecolor(f'{self.selected_color_background}')
             plt.plot(x1, x2, color=self.selected_color)
-            plt.ylabel(f'{self.polynomial}')
+            x_symbols = symbols('x')
+            ylabel_polynomial = collect(self.polynomial, x_symbols)
+            plt.ylabel(f'{ylabel_polynomial}')
             plt.show()
             self.accept()
 
