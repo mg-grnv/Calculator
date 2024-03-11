@@ -37,6 +37,7 @@ class Charting(QDialog):
         else:
             if self.left_border.value() != 0 and self.right_border.value() != 0:
                 plt.xlim(self.left_border.value(), self.right_border.value())
+            ax.set_facecolor(f'{self.selected_color_background}')
             plt.plot(x1, x2, color=self.selected_color)
             plt.ylabel(f'{self.polynomial}')
             plt.show()
@@ -57,20 +58,30 @@ class Charting(QDialog):
         self.graph_color_pixmap.fill(QColor(self.selected_color))
         self.choice_color_graph.setIcon(QIcon(self.graph_color_pixmap))
 
-    def color_selection_axes(self):
+    def color_selection_axis(self):
         color_dialog_axis = QColorDialog()
         self.color_axis = color_dialog_axis.getColor()
         self.selected_color_axis = self.color_axis.name()
         self.axis_color_pixmap.fill(QColor(self.selected_color_axis))
         self.choice_color_axis.setIcon(QIcon(self.axis_color_pixmap))
 
+    def color_selection_background(self):
+        color_dialog_background = QColorDialog()
+        self.color_background = color_dialog_background.getColor()
+        self.selected_color_background = self.color_background.name()
+        self.background_color_pixmap.fill(QColor(self.selected_color_background))
+        self.choice_color_background.setIcon(QIcon(self.background_color_pixmap))
+
     def initUI(self):
+        self.selected_color_background = '#ffffff'
         self.selected_color_axis = '#000000'
         self.selected_color = '#0055ff'
         self.graph_color_pixmap = QPixmap(20, 20)
         self.graph_color_pixmap.fill(QColor(self.selected_color))
         self.axis_color_pixmap = QPixmap(20, 20)
         self.axis_color_pixmap.fill(QColor(self.selected_color_axis))
+        self.background_color_pixmap = QPixmap(20, 20)
+        self.background_color_pixmap.fill(QColor(self.selected_color_background))
         self.setWindowTitle('Построение графиков функций')
         self.setMinimumWidth(300)
         grid = QGridLayout()
@@ -114,6 +125,11 @@ class Charting(QDialog):
         grid.addWidget(self.choice_color_graph, 5, 0, 1, 2)
         self.choice_color_axis = QPushButton('Выбор цвета осей')
         self.choice_color_axis.setIcon(QIcon(self.axis_color_pixmap))
-        self.choice_color_axis.clicked.connect(self.color_selection_axes)
+        self.choice_color_axis.clicked.connect(self.color_selection_axis)
         self.choice_color_axis.setLayoutDirection(Qt.RightToLeft)
         grid.addWidget(self.choice_color_axis, 6, 0, 1, 2)
+        self.choice_color_background = QPushButton('Выбор цвета фона')
+        self.choice_color_background.setIcon(QIcon(self.background_color_pixmap))
+        self.choice_color_background.clicked.connect(self.color_selection_background)
+        self.choice_color_background.setLayoutDirection(Qt.RightToLeft)
+        grid.addWidget(self.choice_color_background, 7, 0, 1, 2)
