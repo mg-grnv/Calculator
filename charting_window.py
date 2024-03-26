@@ -1,3 +1,4 @@
+import pylab
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QPixmap, QIcon, QColor
 from PyQt5.QtWidgets import QDialog, QGridLayout, QPushButton, QLineEdit, QLabel, QSlider, QMessageBox, QColorDialog
@@ -43,6 +44,8 @@ class Charting(QDialog):
             x_symbols = symbols('x')
             ylabel_polynomial = collect(self.polynomial, x_symbols)
             plt.ylabel(f'{ylabel_polynomial}')
+            fig = pylab.gcf()
+            fig.canvas.manager.set_window_title('График функции')
             plt.show()
             self.accept()
 
